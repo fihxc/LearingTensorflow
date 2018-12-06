@@ -98,4 +98,3 @@ with tf.Session() as sess:
 plt.scatter(X[:, 0], X[:, 1], c=np.squeeze(Y_c))
 plt.contour(xx, yy, probs, levels=[.5])
 plt.show()
-
