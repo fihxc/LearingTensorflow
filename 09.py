@@ -214,4 +214,3 @@ finally:
     cost = time.time() - begin
     logger.info("Time elapse: {:d} hrs {:d} min {:0.2f} s".format(int(cost//3600), int((cost%3600)//60), cost%60))
     summary_writer.close()
-
