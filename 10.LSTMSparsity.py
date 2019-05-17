@@ -53,7 +53,7 @@ def prune(value ,prune_ratio):
     thr = tmp[int(len(tmp)*prune_ratio)]
     mask = np.abs(value) > thr
     return mask*value
-
+ 
 with tf.Session() as sess:
     tf.global_variables_initializer().run()
     for i in range(100):
