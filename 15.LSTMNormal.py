@@ -7,8 +7,8 @@ input_vec_size = 28
 lstm_size = 28
 time_step_size = 28
 
-batch_size = 128
-test_size = 256
+batch_size = 50
+test_size = 101
 
 def init_weights(shape):
     return tf.Variable(tf.random_normal(shape, stddev=0.01))
@@ -28,11 +28,12 @@ mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 trX, trY, teX, teY = mnist.train.images, mnist.train.labels, mnist.test.images, mnist.test.labels
 
 # 将每张图用一个28x28的矩阵表示,(55000,28,28,1)
-# print (trX)
+print (trY)
 trX = trX.reshape(-1, 28, 28)
 teX = teX.reshape(-1, 28, 28)
 # print (trX)
 
+exit
 
 X = tf.placeholder("float", [None, 28, 28])
 Y = tf.placeholder("float", [None, 10])
@@ -51,10 +52,10 @@ with tf.Session() as sess:
     tf.global_variables_initializer().run()
     # params = tf.get_collection('params')
     # print(sess.run(params))
-    for i in range(1):
+    for i in range(10):
         for start, end in zip(range(0, len(trX), batch_size), range(batch_size, len(trX)+1, batch_size)):
             sess.run(train_op, feed_dict={X: trX[start:end], Y: trY[start: end]})
-        # s = len(teX)
+        s = len(teX)
         test_indices = np.arange(len(teX))
         np.random.shuffle(test_indices)
         test_indices = test_indices[0: test_size]
