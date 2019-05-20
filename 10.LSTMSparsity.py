@@ -24,7 +24,7 @@ def model(X, W, B, lstm_size):
     print(lstm)
     outputs, _states = rnn.static_rnn(lstm, X_split, dtype=tf.float32)
     print(lstm)
-    A = lstm.get_kernel
+    A = lstm.get_kernel()
     print("A ", A)
     return tf.matmul(outputs[-1],W)+B, lstm.state_size, lstm
 
