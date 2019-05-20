@@ -9,7 +9,7 @@ lstm_size = 18
 time_step_size = 18
 
 batch_size = 20
-test_size = 11
+test_size = 21
 
 def init_weights(shape):
     return tf.Variable(tf.random_normal(shape, stddev=0.01))
@@ -29,18 +29,18 @@ def model(X, W, B, lstm_size):
 # trX, trY, teX, teY = mnist.train.images, mnist.train.labels, mnist.test.images, mnist.test.labels
 file_a = open('x.pickle', 'rb')
 data = pic.load(file_a)
-trX = data[0: 60]
-teX = data
+trX = data[0:73]
+teX = data[0:73]
 file_a.close()
 
 file_b = open('y.pickle', 'rb')
 data = pic.load(file_b)
-trY = data[0: 60]
-teY = data
+trY = data[0:73]
+teY = data[0:73]
 file_b.close()
 
 # 将每张图用一个28x28的矩阵表示,(73,18,18,1)
-print (type(trY[0]))
+# print (type(trY[0]))
 trX = trX.reshape(-1, 18, 18)
 teX = teX.reshape(-1, 18, 18)
 # print (trX)
@@ -69,4 +69,12 @@ with tf.Session() as sess:
         test_indices = np.arange(len(teX))
         np.random.shuffle(test_indices)
         test_indices = test_indices[0: test_size]
-        print(i, np.mean(np.argmax(teY[test_indices], axis=1) == sess.run(predict_op, feed_dict={X: teX[test_indices]})))
+        predict = sess.run(predict_op, feed_dict={X: teX[test_indices]})
+        # print(predict)
+        actually = np.argmax(teY[test_indices], axis=1)
+        # print(actually)
+        delta = np.mean(np.fabs(predict - actually))
+        # print(delta)
+        # print(i, np.mean(actually == predict))
+        if i >= 1900:
+            print(delta)
