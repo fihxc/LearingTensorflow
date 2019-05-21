@@ -9,7 +9,7 @@ lstm_size = 18
 time_step_size = 18
 
 batch_size = 20
-test_size = 21
+test_size = 13
 
 def init_weights(shape):
     return tf.Variable(tf.random_normal(shape, stddev=0.01))
@@ -30,13 +30,13 @@ def model(X, W, B, lstm_size):
 file_a = open('x.pickle', 'rb')
 data = pic.load(file_a)
 trX = data[0:73]
-teX = data[0:73]
+teX = data[0:63]
 file_a.close()
 
 file_b = open('y.pickle', 'rb')
 data = pic.load(file_b)
 trY = data[0:73]
-teY = data[0:73]
+teY = data[0:63]
 file_b.close()
 
 # 将每张图用一个28x28的矩阵表示,(73,18,18,1)
@@ -62,7 +62,7 @@ with tf.Session() as sess:
     tf.global_variables_initializer().run()
     # params = tf.get_collection('params')
     # print(sess.run(params))
-    for i in range(2000):
+    for i in range(51):
         for start, end in zip(range(0, len(trX), batch_size), range(batch_size, len(trX)+1, batch_size)):
             sess.run(train_op, feed_dict={X: trX[start:end], Y: trY[start: end]})
         s = len(teX)
@@ -70,11 +70,15 @@ with tf.Session() as sess:
         np.random.shuffle(test_indices)
         test_indices = test_indices[0: test_size]
         predict = sess.run(predict_op, feed_dict={X: teX[test_indices]})
-        # print(predict)
+        print("Iteration：", i)
+        print("Train set: 73 persons.")
+        print("Test set: 13 persons.")
+        print("Predict: ", predict)
         actually = np.argmax(teY[test_indices], axis=1)
-        # print(actually)
+        print("Manual: ", actually)
         delta = np.mean(np.fabs(predict - actually))
-        # print(delta)
-        # print(i, np.mean(actually == predict))
-        if i >= 1900:
-            print(delta)
+        print("Predict error:", delta)
+        print("Accuracy: ", np.mean(actually == predict))
+        print("-------------------------------")
+        # if i >= 1900:
+            # print(delta)
